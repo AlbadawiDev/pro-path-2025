@@ -1,8 +1,19 @@
 from collections import Counter
 
-texto = input("Pega un párrafo: ").lower()
-for ch in ",.;:!?\n\t":
-    texto = texto.replace(ch, " ")
-palabras = [p for p in texto.split(" ") if p]
-for palabra, cuenta in Counter(palabras).most_common(10):
-    print(f"{palabra}: {cuenta}")
+import re
+
+
+def word_frequencies(text, limit=10):
+    if limit < 0:
+        raise ValueError('limit must be non-negative')
+    words = re.findall(r"[^\W_]+(?:['’][^\W_]+)?", text.casefold(), flags=re.UNICODE)
+    return Counter(words).most_common(limit)
+
+
+def main():
+    for word, count in word_frequencies(input('Pega un párrafo: ')):
+        print(f'{word}: {count}')
+
+
+if __name__ == '__main__':
+    main()
